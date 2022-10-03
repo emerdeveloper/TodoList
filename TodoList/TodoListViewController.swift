@@ -9,7 +9,7 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
     
-    let todoList = ["Comprar Leche", "Ir al gimnasio", "Ir a la Universidad"]
+    var todoList = ["Comprar Leche", "Ir al gimnasio", "Ir a la Universidad"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +27,34 @@ class TodoListViewController: UITableViewController {
         
         return cell
     }
-
+    
+    //Delegate Methods
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
+            tableView.cellForRow(at: indexPath)?.accessoryType = .none
+        }
+        else {
+            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    //Add new Item
+    
+    @IBAction func btnAddItem(_ sender: UIBarButtonItem) {
+        var textField = UITextField()
+        let alert = UIAlertController(title: "Agrega una nueva tarea", message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Agregar", style: .default) { (action) in
+            self.todoList.append(textField.text!)
+            self.tableView.reloadData()
+        }
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Crea una nueva tarea"
+            textField = alertTextField
+        }
+        alert.addAction(action)
+        present(alert, animated: true)
+    }
 }
 
